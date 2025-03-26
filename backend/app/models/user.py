@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, Enum
 from app.models.base import Base
 from sqlalchemy.orm import relationship
 
-class UserTypeEnum(enum.Enum):
+class UserTypeEnum(str, enum.Enum):
     alumno = "alumno"
     profesor = "profesor"
 
