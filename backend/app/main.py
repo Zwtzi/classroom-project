@@ -1,12 +1,25 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine
 from app.models.base import Base
-from app.routes import auth
-from app.routes import class_router
-from app.routes import notice
-from app.routes import enrollment
+from app.routes import auth, class_router, notice, enrollment
+
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",  # Ajusta esto al puerto de tu frontend
+    # Agrega otros orígenes según sea necesario
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Crear las tablas en la base de datos
 Base.metadata.create_all(bind=engine)
