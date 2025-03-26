@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { apiLogin } from '../api/api';  // Asegúrate de que esta función exista en api.js
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin = async () => false }) => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(''); // Declarar el estado para el error
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onLogin({ email, password });
+        setError(''); // Limpiar error previo
+
+        // Realizar la autenticación a través de la API
+        const success = await apiLogin({ email, password });
+        if (success) {
+            navigate('/dashboard');
+        } else {
+            setError('Usuario o contraseña incorrectos');
+        }
     };
 
     return (
@@ -30,6 +41,7 @@ const Login = ({ onLogin }) => {
                 />
                 <button type="submit">Ingresar</button>
             </form>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <p>
                 ¿No tienes una cuenta? <Link to="/register">Regístrate aquí</Link>
             </p>

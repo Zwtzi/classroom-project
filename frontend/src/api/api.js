@@ -47,3 +47,25 @@ export const fetchClases = async () => {
         throw error;
     }
 };
+
+export const apiLogin = async ({ email, password }) => {
+    try {
+        const response = await fetch('http://localhost:8000/auth/login', {  // Ajusta la URL a tu API
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            return true;  // El login fue exitoso
+        } else {
+            console.error(data.message);
+            return false;  // El login falló
+        }
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+        return false;
+    }
+};
